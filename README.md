@@ -1,6 +1,6 @@
 # Newspack Development Environment
 
-These are instructions used for setting up the for [Newspack](https://newspack.blog/) development environment.
+These are the instructions for setting up the for [Newspack](https://newspack.blog/) development environment.
 
 ## VVV setup
 
