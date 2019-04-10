@@ -3,35 +3,37 @@
 # Site path
 WP_PATH="/srv/www/wordpress-trunk/public_html/src"
 
-# Check if path exists
-if [ ! -d "$WP_PATH" ]; then
-  echo "Directory $WP_PATH not found! Please update the WP_PATH var and run provisioning again."
-  echo "Exiting, not complete."
-  exit;
+# Newspack plugin installation
+if [ -d "$WP_PATH"/wp-content/plugins/newspack-plugin ]; then
+  echo "The Newspack plugin already seems to have been installed. Skipping installing it twice."
+else
+  # -----
+  echo "Installing and activating the Newspack Plugin..."
+  # -----
+  cd "${WP_PATH}"/wp-content/plugins
+  git clone https://github.com/Automattic/newspack-plugin.git
+  cd "${WP_PATH}"/plugins/newspack-plugin
+  composer install
+  npm install
+  cd "${WP_PATH}"/..
+  wp plugin activate newspack-plugin
 fi
 
-# -----
-echo "Installing and activating the Newspack Plugin..."
-# -----
-cd "${WP_PATH}"/wp-content/plugins
-git clone https://github.com/Automattic/newspack-plugin.git
-cd "${WP_PATH}"/plugins/newspack-plugin
-composer install
-npm install
-cd "${WP_PATH}"/..
-wp plugin activate newspack-plugin
-
-# -----
-echo "Installing and activating the Newspack Theme..."
-# -----
-cd "${WP_PATH}"/wp-content/themes
-git clone https://github.com/Automattic/newspack-theme.git
-cd "${WP_PATH}"/wp-content/themes/newspack-theme
-composer install
-npm install
-cd "${WP_PATH}"/..
-wp theme activate newspack-theme
+# Newspack theme installation
+if [ -d "$WP_PATH"/wp-content/themes/newspack-theme ]; then
+  echo "The Newspack theme already seems to have been installed. Skipping installing it twice."
+else
+  # -----
+  echo "Installing and activating the Newspack Theme..."
+  # -----
+  cd "${WP_PATH}"/wp-content/themes
+  git clone https://github.com/Automattic/newspack-theme.git
+  cd "${WP_PATH}"/wp-content/themes/newspack-theme
+  composer install
+  npm install
+  cd "${WP_PATH}"/..
+  wp theme activate newspack-theme
+fi
 
 echo "Done!"
-exit;
 
