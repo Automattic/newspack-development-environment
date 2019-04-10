@@ -3,6 +3,13 @@
 # Site path
 WP_PATH="/srv/www/wordpress-trunk/public_html/src"
 
+# Check if path exists
+if [ ! -d "$WP_PATH" ]; then
+  echo "Directory $WP_PATH not found! Please update the WP_PATH var and run provisioning again."
+  echo "Exiting, not complete."
+  exit;
+fi
+
 # Newspack plugin installation
 if [ -d "$WP_PATH"/wp-content/plugins/newspack-plugin ]; then
   echo "The Newspack plugin already seems to have been installed. Skipping installing it twice."
