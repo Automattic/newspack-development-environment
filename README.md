@@ -43,8 +43,8 @@ If a site different than `wordpress-trunk` was used, now is the time to update t
 
 ### Provisioning
 
-If the VVV is not already up and running, you can run `vagrant up --provision`.
-Otherwise, run `vagrant reload --provision` to update VVV with the new site.
+To finish up, run `vagrant up --provision`.
+Or if your VVV is already up and running, run `vagrant reload --provision`.
 
 ## Using VVV
 
