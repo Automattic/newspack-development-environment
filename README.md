@@ -4,11 +4,11 @@ These are instructions used for setting up the for [Newspack](https://newspack.b
 
 ## VVV setup
 
-### Install VVV
+### VVV Install
 
 The basic instructions for installing VVV are in their [documentation](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/). Complete the setup per their instructions before continuing below.
 
-### Set up Site
+### Site Setup
 
 The VVV comes bundled with the `wordpress-trunk` site which contains all the WP test dependencies used in this project. Newspack environment uses this site for its development.
 
@@ -19,7 +19,7 @@ Edit the `vvv-custom.yml` in the main VVV folder, then make sure the following s
 sites:
 
   wordpress-trunk:
-    skip_provisioning: true
+    skip_provisioning: false
     description: "An svn based WP Core trunk dev setup, useful for contributor days, Trac tickets, patches"
     repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template-develop.git
     hosts:
@@ -32,7 +32,7 @@ Here the host `trunk.wordpress.test` host is used. In case this host name is alr
 
 All other sites can be removed and commented out by adding the `#` character at the beginning of the lines.  
 
-### Run Setup Script
+### The Setup Script
 
 Next change directory to point inside your Vagrant instance folder (next to the `vvv-custom.yml` file) and run the following command:
 ```
@@ -41,7 +41,7 @@ bash <(curl -s https://raw.githubusercontent.com/Automattic/newspack-development
 
 If a site different than `wordpress-trunk` was used, now is the time to update the `./config/homebin/vagrant_provision_custom` file, and change the `WP_PATH` path. 
 
-### Provision
+### Provisioning
 
 If the VVV is not already up and running, you can run `vagrant up --provision`.
 Otherwise, run `vagrant reload --provision` to update VVV with the new site.
