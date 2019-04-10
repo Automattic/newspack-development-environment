@@ -36,15 +36,19 @@ All other sites can be removed and commented out by adding the `#` character at 
 
 Next change directory to point inside your Vagrant instance folder (next to the `vvv-custom.yml` file) and run the following command:
 ```
-bash <(curl -s https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/setup_newspack.sh)
+$ bash <(curl -s https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/setup_newspack.sh)
 ```
 
 If a site different than `wordpress-trunk` was used, now is the time to update the `./config/homebin/vagrant_provision_custom` file, and change the `WP_PATH` path. 
 
-### Provisioning
+### Booting Up and Provisioning VVV
 
-To finish up, run `vagrant up --provision`.
-Or if your VVV is already up and running, run `vagrant reload --provision`.
+It is recommended to power up and provision VVV by running these two commands explicitly (rather than running eg. `vagrant up --provision`, which has sometimes shown to omit executing the post provisioning script):
+
+```
+$ vagrant up
+$ vagrant provision
+```
 
 ## Using VVV
 
