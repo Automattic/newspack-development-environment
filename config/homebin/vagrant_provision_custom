@@ -22,6 +22,9 @@ else
   cd "${WP_PATH}"/plugins/newspack-plugin
   composer install
   npm install
+  # --- create a link to the plugin in build/
+  ln -s "${WP_PATH}"/wp-content/plugins/newspack-plugin "${WP_PATH}"/../build/wp-content/plugins/newspack-plugin
+  # -- activate the plugin
   cd "${WP_PATH}"/..
   wp plugin activate newspack-plugin
 fi
@@ -38,6 +41,9 @@ else
   cd "${WP_PATH}"/wp-content/themes/newspack-theme
   composer install
   npm install
+  # --- create a link to theme in build/
+  ln -s "${WP_PATH}"/wp-content/themes/newspack-theme "${WP_PATH}"/../build/wp-content/themes/newspack-theme
+  # -- activate the theme
   cd "${WP_PATH}"/..
   wp theme activate newspack-theme
 fi
