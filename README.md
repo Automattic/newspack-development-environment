@@ -31,6 +31,15 @@ vagrant --version
 If you don’t, install from https://www.vagrantup.com/downloads.html. (Download the file appropriate to your system and follow the instructions after).
 
 
+## Reboot
+
+As recommended by the [VVV documentation](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/):
+
+> _"If you don’t reboot your machine after installing/updating Vagrant and VirtualBox, there can be networking issues. A full power cycle will ensure all components are fully installed and loaded"_.
+
+reboot your computer now, and then come back to continue.
+
+
 # Setup the Newspack Dev Environment
 
 ## Setup VVV
@@ -53,16 +62,7 @@ vagrant plugin install vagrant-hostsupdater --local
 ```
 
 
-## Reboot
-
-As recommended by the [VVV documentation](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/):
-
-> _"If you don’t reboot your machine after installing/updating Vagrant and VirtualBox, there can be networking issues. A full power cycle will ensure all components are fully installed and loaded"_.
-
-reboot your computer now, and then come back to continue.
-
-
-## Finish VVV Setup
+## Provision VVV
 
 Run **these exact commands**:
 
@@ -76,9 +76,15 @@ vagrant up
 vagrant provision
 ```
 
-* note: running shorter versions of the commands (such as _'vagrant up --provision'_ instead of the ones above) has sometimes shown not to execute the custom installation scripts properly
+* note: running shorter versions of the commands instead of the exact ones as above (such as _'vagrant up --provision'_) has sometimes shown not to execute the custom installation scripts properly
 
 This process should have downloaded and installed all the necessary Newspack project files, inside the VVV container. In case it has failed for some unpredicted reason, consult the [installation script](https://github.com/Automattic/newspack-development-environment/blob/master/config/homebin/vagrant_provision_custom) for required steps.
+
+
+## Run Newspack
+
+In a brower go to http://newspack-dev.test/wp-admin and login with username `admin` and password `password`.
+
 
 
 ## Build Newspack
@@ -142,6 +148,3 @@ cd  ~/repositories/VVV_Newspack/www/wordpress-trunk/public_html/src/wp-content/p
 npm ci && npm run clean && npm run build:webpack
 ```
 
-## Run Newspack
-
-In a brower go to trunk.wordpress.test/wp-admin and login with username `admin` and password `password`.
