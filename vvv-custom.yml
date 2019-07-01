@@ -21,12 +21,11 @@
 # and options are
 sites:
 
-  wordpress-trunk:
-    skip_provisioning: false # provisioning this one takes longer
-    description: "An svn based WP Core trunk dev setup, useful for contributor days, Trac tickets, patches"
-    repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template-develop.git
+  newspack-dev:
+    skip_provisioning: false
+    repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template.git
     hosts:
-      - trunk.wordpress.test
+      - newspack-dev.test
 
 # Utilities are system level items rather than sites, that install tools or packages
 # the core utilities install tools such as phpmyadmin
