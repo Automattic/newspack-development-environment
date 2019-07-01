@@ -15,7 +15,8 @@ fi
 
 # Download the provisioning script
 mkdir -p config/homebin
-curl -0 https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/config/homebin/vagrant_provision_custom > config/homebin/vagrant_provision_custom
+curl -s0 https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/config/homebin/vagrant_provision_custom > config/homebin/vagrant_provision_custom
+curl -s0 https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/vvv-custom.yml > vvv-custom.yml
 chmod ugo+x config/homebin/vagrant_provision_custom
 
 echo "Done!"
