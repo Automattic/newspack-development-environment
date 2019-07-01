@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Site path
-WP_PATH="/srv/www/wordpress-trunk/public_html/src"
+WP_PATH="/srv/www/wordpress-trunk/public_html"
 
 # Check if path exists
 if [ ! -d "$WP_PATH" ]; then
@@ -10,41 +10,63 @@ if [ ! -d "$WP_PATH" ]; then
   exit;
 fi
 
+# Create required dirs
+mkdir -p /srv/www/wordpress-trunk/public_html/build/wp-content/plugins
+mkdir -p /srv/www/wordpress-trunk/public_html/build/wp-content/themes
+
 # Newspack plugin installation
-if [ -d "$WP_PATH"/wp-content/plugins/newspack-plugin ]; then
+if [ -d "$WP_PATH"/src/wp-content/plugins/newspack-plugin ]; then
   echo "The Newspack plugin already seems to have been installed. Skipping installing it twice."
 else
   # -----
   echo "Installing and activating the Newspack Plugin..."
   # -----
-  cd "${WP_PATH}"/wp-content/plugins
+  cd "${WP_PATH}"/src/wp-content/plugins
   git clone https://github.com/Automattic/newspack-plugin.git
-  cd "${WP_PATH}"/plugins/newspack-plugin
-  composer install
-  npm install
-  # --- create a link to the plugin in build/
-  ln -s "${WP_PATH}"/wp-content/plugins/newspack-plugin "${WP_PATH}"/../build/wp-content/plugins/newspack-plugin
+  cd "${WP_PATH}"/src/wp-content/plugins/newspack-plugin
+  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
+  composer install --prefer-source --no-interaction
+  # --- create a link from src/ to build/
+  ln -s "${WP_PATH}"/src/wp-content/plugins/newspack-plugin "${WP_PATH}"/build/wp-content/plugins/newspack-plugin
   # -- activate the plugin
-  cd "${WP_PATH}"/..
+  cd "${WP_PATH}"
   wp plugin activate newspack-plugin
 fi
 
+# Newspack Blocks installation
+if [ -d "$WP_PATH"/src/wp-content/plugins/newspack-blocks ]; then
+  echo "The Newspack Blocks already seems to have been installed. Skipping installing it twice."
+else
+  # -----
+  echo "Installing and activating the Newspack Blocks..."
+  # -----
+  cd "${WP_PATH}"/src/wp-content/plugins
+  git clone https://github.com/Automattic/newspack-blocks.git
+  cd "${WP_PATH}"/src/wp-content/plugins/newspack-blocks
+  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
+  composer install --prefer-source --no-interaction
+  # --- create a link from src/ to build/
+  ln -s "${WP_PATH}"/src/wp-content/plugins/newspack-blocks "${WP_PATH}"/build/wp-content/plugins/newspack-blocks
+  # -- activate the plugin
+  cd "${WP_PATH}"
+  wp plugin activate newspack-blocks
+fi
 # Newspack theme installation
-if [ -d "$WP_PATH"/wp-content/themes/newspack-theme ]; then
+if [ -d "$WP_PATH"/src/wp-content/themes/newspack-theme ]; then
   echo "The Newspack theme already seems to have been installed. Skipping installing it twice."
 else
   # -----
   echo "Installing and activating the Newspack Theme..."
   # -----
-  cd "${WP_PATH}"/wp-content/themes
+  cd "${WP_PATH}"/src/wp-content/themes
   git clone https://github.com/Automattic/newspack-theme.git
-  cd "${WP_PATH}"/wp-content/themes/newspack-theme
-  composer install
-  npm install
-  # --- create a link to theme in build/
-  ln -s "${WP_PATH}"/wp-content/themes/newspack-theme "${WP_PATH}"/../build/wp-content/themes/newspack-theme
+  cd "${WP_PATH}"/src/wp-content/themes/newspack-theme
+  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
+  composer install --prefer-source --no-interaction
+  # --- create a link from src/ to build/
+  ln -s "${WP_PATH}"/src/wp-content/themes/newspack-theme "${WP_PATH}"/build/wp-content/themes/newspack-theme
   # -- activate the theme
-  cd "${WP_PATH}"/..
+  cd "${WP_PATH}"
   wp theme activate newspack-theme
 fi
 
