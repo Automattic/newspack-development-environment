@@ -1,74 +1,115 @@
 #!/bin/bash
 
-# Site path
-WP_PATH="/srv/www/wordpress-trunk/public_html"
+
+# Location where the Newspack dependencies are to be cloned and possibly built
+RESOURCES_INSTALL_PATH="/srv/www/newspack-dev/newspack-resources"
+# Location of site's `wp-content`, where symlinks to the Newspack dependencies are to be created
+WP_CONTENT_PATH="/srv/www/newspack-dev/public_html/wp-content"
+# GitHub link to Newspack Plugin latest release zip file
+NEWSPACK_PLUGIN_RELEASE_FILE_URL="https://github.com/Automattic/newspack-plugin/releases/latest/download/newspack-plugin.zip"
+
 
 # Check if path exists
-if [ ! -d "$WP_PATH" ]; then
-  echo "Directory $WP_PATH not found! Please update the WP_PATH var and run provisioning again."
+if [ ! -d "$WP_CONTENT_PATH" ]; then
+  echo "Directory $WP_CONTENT_PATH not found! Please update the WP_CONTENT_PATH var and run provisioning again."
   echo "Exiting, not complete."
   exit;
 fi
 
-# Create required dirs
-mkdir -p /srv/www/wordpress-trunk/public_html/build/wp-content/plugins
-mkdir -p /srv/www/wordpress-trunk/public_html/build/wp-content/themes
+# Create resources path
+mkdir -p "${RESOURCES_INSTALL_PATH}"
+
+
 
 # Newspack plugin installation
-if [ -d "$WP_PATH"/src/wp-content/plugins/newspack-plugin ]; then
+if [ -d "$WP_CONTENT_PATH"/plugins/newspack-plugin ]; then
   echo "The Newspack plugin already seems to have been installed. Skipping installing it twice."
 else
-  # -----
-  echo "Installing and activating the Newspack Plugin..."
-  # -----
-  cd "${WP_PATH}"/src/wp-content/plugins
-  git clone https://github.com/Automattic/newspack-plugin.git
-  cd "${WP_PATH}"/src/wp-content/plugins/newspack-plugin
-  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
-  composer install --prefer-source --no-interaction
-  # --- create a link from src/ to build/
-  ln -s "${WP_PATH}"/src/wp-content/plugins/newspack-plugin "${WP_PATH}"/build/wp-content/plugins/newspack-plugin
-  # -- activate the plugin
-  cd "${WP_PATH}"
+  echo "Downloading and installing the Newspack Plugin..."
+
+  # Download latest release newspack-plugin.zip
+  curl -L0s "${NEWSPACK_PLUGIN_RELEASE_FILE_URL}" > "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip
+
+  # Check if downloaded file's content equals "Not Found" -- GitHub serves "Not Found" content if it's not found
+  FILE_CONTENT=$( cat "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip )
+  if [[ "Not Found" == "$FILE_CONTENT" ]]
+      then
+          echo "Could not download Newspack Plugin release file. Please check ${NEWSPACK_PLUGIN_RELEASE_FILE_URL} and run again."
+          rm "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip
+          exit 1;
+  fi
+
+  # Unzip Newspack Plugin release archive
+  rm -rf "${RESOURCES_INSTALL_PATH}"/newspack-plugin
+  mkdir -p "${RESOURCES_INSTALL_PATH}"/newspack-plugin;
+  unzip "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip -d "${RESOURCES_INSTALL_PATH}"/newspack-plugin
+  
+  # Check if exit code of last executed command (unzip) was success (== 0)
+  if [[ $? != 0 ]]
+      then
+          echo "Error extracting the Newspack Plugin release file ${RESOURCES_INSTALL_PATH}/newspack-plugin.zip}."
+          echo "Exiting, setup incomplete."
+          rm "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip
+          rm -rf "${RESOURCES_INSTALL_PATH}"/newspack-plugin;
+          exit 1;
+      else 
+          rm "${RESOURCES_INSTALL_PATH}"/newspack-plugin.zip
+  fi
+
+  # Create a symlink
+  ln -s "${RESOURCES_INSTALL_PATH}"/newspack-plugin "${WP_CONTENT_PATH}"/plugins/newspack-plugin
+  
+  # Activate the plugin
+  cd "${WP_CONTENT_PATH}"
   wp plugin activate newspack-plugin
 fi
 
+
+
 # Newspack Blocks installation
-if [ -d "$WP_PATH"/src/wp-content/plugins/newspack-blocks ]; then
+if [ -d "$WP_CONTENT_PATH"/plugins/newspack-blocks ]; then
   echo "The Newspack Blocks already seems to have been installed. Skipping installing it twice."
 else
-  # -----
-  echo "Installing and activating the Newspack Blocks..."
-  # -----
-  cd "${WP_PATH}"/src/wp-content/plugins
-  git clone https://github.com/Automattic/newspack-blocks.git
-  cd "${WP_PATH}"/src/wp-content/plugins/newspack-blocks
-  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
+  echo "Downloading and installing the Newspack Blocks..."
+  
+  # Clone the Repo
+  git clone https://github.com/Automattic/newspack-blocks.git "$RESOURCES_INSTALL_PATH"/newspack-blocks
+
+  # Composer install -- without the `--prefer-source` fails in VVV
+  cd "${RESOURCES_INSTALL_PATH}"/newspack-blocks
   composer install --prefer-source --no-interaction
-  # --- create a link from src/ to build/
-  ln -s "${WP_PATH}"/src/wp-content/plugins/newspack-blocks "${WP_PATH}"/build/wp-content/plugins/newspack-blocks
-  # -- activate the plugin
-  cd "${WP_PATH}"
+
+  # Create a link from src/ to build/
+  ln -s "${RESOURCES_INSTALL_PATH}"/newspack-blocks "${WP_CONTENT_PATH}"/plugins/newspack-blocks
+
+  # Activate the plugin
+  cd "${WP_CONTENT_PATH}"
   wp plugin activate newspack-blocks
 fi
+
+
+
 # Newspack theme installation
-if [ -d "$WP_PATH"/src/wp-content/themes/newspack-theme ]; then
+if [ -d "$WP_CONTENT_PATH"/themes/newspack-theme ]; then
   echo "The Newspack theme already seems to have been installed. Skipping installing it twice."
 else
-  # -----
-  echo "Installing and activating the Newspack Theme..."
-  # -----
-  cd "${WP_PATH}"/src/wp-content/themes
-  git clone https://github.com/Automattic/newspack-theme.git
-  cd "${WP_PATH}"/src/wp-content/themes/newspack-theme
-  # composer installation with --prefer-source is slower, but otherwise it fails to install without it inside VVV
+  echo "Downloading and installing the Newspack Theme..."
+
+  # Clone the Repo
+  git clone https://github.com/Automattic/newspack-theme.git "$RESOURCES_INSTALL_PATH"/newspack-theme
+
+  # Composer install -- without the `--prefer-source` fails in VVV
+  cd "${RESOURCES_INSTALL_PATH}"/newspack-theme
   composer install --prefer-source --no-interaction
-  # --- create a link from src/ to build/
-  ln -s "${WP_PATH}"/src/wp-content/themes/newspack-theme "${WP_PATH}"/build/wp-content/themes/newspack-theme
-  # -- activate the theme
-  cd "${WP_PATH}"
+
+  # Create a link from src/ to build/
+  ln -s "${RESOURCES_INSTALL_PATH}"/newspack-theme "${WP_CONTENT_PATH}"/themes/newspack-theme
+
+  # Activate the plugin
+  cd "${WP_CONTENT_PATH}"
   wp theme activate newspack-theme
 fi
 
-echo "Done!"
 
+
+echo "Newspack installation finished."
