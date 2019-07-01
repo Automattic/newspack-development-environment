@@ -60,8 +60,7 @@ else
   ln -s "${RESOURCES_INSTALL_PATH}"/newspack-plugin "${WP_CONTENT_PATH}"/plugins/newspack-plugin
   
   # Activate the plugin
-  cd "${WP_CONTENT_PATH}"
-  wp plugin activate newspack-plugin
+  su - vagrant -c "cd ${WP_CONTENT_PATH}/../.. && wp plugin activate newspack-plugin"
 fi
 
 
@@ -83,8 +82,7 @@ else
   ln -s "${RESOURCES_INSTALL_PATH}"/newspack-blocks "${WP_CONTENT_PATH}"/plugins/newspack-blocks
 
   # Activate the plugin
-  cd "${WP_CONTENT_PATH}"
-  wp plugin activate newspack-blocks
+  su - vagrant -c "cd ${WP_CONTENT_PATH}/../.. && wp plugin activate newspack-blocks"
 fi
 
 
@@ -105,9 +103,8 @@ else
   # Create a link from src/ to build/
   ln -s "${RESOURCES_INSTALL_PATH}"/newspack-theme "${WP_CONTENT_PATH}"/themes/newspack-theme
 
-  # Activate the plugin
-  cd "${WP_CONTENT_PATH}"
-  wp theme activate newspack-theme
+  # Activate the theme
+  su - vagrant -c "cd ${WP_CONTENT_PATH}/../.. && wp theme activate newspack-theme"
 fi
 
 
