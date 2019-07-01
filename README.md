@@ -1,96 +1,147 @@
 # Newspack Development Environment
 
-These are the instructions for setting up the for [Newspack](https://newspack.blog/) development environment.
+What follows are steps to guide you through setting up a local instance for [Newspack](https://newspack.blog/) testing.
 
-## VVV setup
+Most of the steps are one-time setup that you may or may not need to do depending on your existing configuration and what you have installed.
 
-### VVV Install
+All of this assumes you are working on a Mac or a Linux. All code snippets should be run in the Terminal application.
 
-The basic instructions for installing VVV are in their [documentation](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/). Complete the setup per their instructions before continuing below.
 
-### Site Setup
+# Install the Prerequisites
 
-The VVV comes bundled with the `wordpress-trunk` site which contains all the WP test dependencies used in this project. Newspack environment uses this site for its development.
-
-If the `vvv-custom.yml` file does not exist, you can create it by copying `vvv-config.yml` to `vvv-custom.yml`.
-
-Edit the `vvv-custom.yml` in the main VVV folder, then make sure the following site is available:
-```
-sites:
-
-  wordpress-trunk:
-    skip_provisioning: false
-    description: "An svn based WP Core trunk dev setup, useful for contributor days, Trac tickets, patches"
-    repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template-develop.git
-    hosts:
-      - trunk.wordpress.test
-```
-
-Be sure to indent correctly as whitespaces matter in YAML files, and VVV prefers to indent using 2 spaces.
-
-Here the host `trunk.wordpress.test` host is used. In case this host name is already in use on your local machine, change it to a different one, and then proceed to the next step.
-
-All other sites can be removed and commented out by adding the `#` character at the beginning of the lines.  
-
-### The Setup Script
-
-Next change directory to point inside your Vagrant instance folder (next to the `vvv-custom.yml` file) and run the following command:
-```
-$ bash <(curl -s https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/setup_newspack.sh)
-```
-
-If a site different than `wordpress-trunk` was used, now is the time to update the `./config/homebin/vagrant_provision_custom` file, and change the `WP_PATH` path. 
-
-### Booting Up and Provisioning VVV
-
-It is recommended to power up and provision VVV by running these two commands explicitly (rather than running eg. `vagrant up --provision`, which has sometimes shown to omit executing the post provisioning script):
+## Install Virtual Box
+   
+To determine if you have Virtual Box, run:
 
 ```
-$ vagrant up
-$ vagrant provision
+virtualbox
 ```
 
-## Using VVV
+This will open the Virtual Box application if you have it already. If not, install from https://www.virtualbox.org/
 
-### DB Access
 
-#### phpMyAdmin
-To use the readily available phpMyAdmin which gets installed with VVV by default:
-* http://vvv.test/database-admin/
-* user: `root`
-* pass: `root`
+## Install Vagrant
+   
+To determine if you have Vagrant already, run:
 
-#### Local DB client
+```
+vagrant --version 
+```
 
-The following parameters' values are taken from default VVV installation. If you have modified those, or perchance run several VVV machines in parallel, you may need to update the following values.
+If you don’t, install from https://www.vagrantup.com/downloads.html. (Download the file appropriate to your system and follow the instructions after).
 
-If you're using a different DB client, you can either create a MariaDB/MySQL DB connection via an SSH tunnel, or use the "direct connection" functionality (on port 3306, created for new VVV versions) which and has a simpler setup.
 
-A DB connection via an SSH tunnel:
-* SSH host: `192.168.50.4`
-* SSH user: `vagrant`
-* SSH password: `vagrant` 
-* DB host: `127.0.0.1`
-* DB port: `3306`
-* DB user: `root`
-* DB pass: `root`
+# Setup the Newspack Dev Environment
 
-To use the direct connection, create a use the following credentials (based on the default VVV configuration values):
-* host: `192.168.50.4`
-* port: `3306`
-* user: `external`
-* pass: `external`
+## Setup VVV
 
-### VVV Dashboard and Docs
+We use a Vagrant configuration called VVV for our local instances.
 
-Additional tools are available in VVV at [http://vvv.test](http://vvv.test): phpMyAdmin, phpMemcachedAdmin, Opcache Status, MailHog, Webgrind, PHP Info, PHP Status.
+If you already have a directory where you like to keep repositories and other code feel free to use it, but for our purposes here we’ll create a directory called `repositories` to contain everything.
 
-### Main Workflow
+Run the following steps (instructions taken from [VVV docs](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/)):
 
-To develop a new feature, plugin or theme, use a standard GitHub workflow:
-* create a new feature branch
-* push the branch to origin
-* create a Pull Request
-* pass the code review
-* merge the feature branch to master
-* delete the feature branch
+```
+mkdir ~/repositories
+
+git clone -b master git://github.com/Varying-Vagrant-Vagrants/VVV.git ~/repositories/VVV_Newspack
+
+cd ~/repositories/VVV_Newspack
+
+vagrant plugin install vagrant-hostsupdater --local
+
+```
+
+
+## Reboot
+
+As recommended by the [VVV documentation](https://varyingvagrantvagrants.org/docs/en-US/installation/software-requirements/):
+
+> _"If you don’t reboot your machine after installing/updating Vagrant and VirtualBox, there can be networking issues. A full power cycle will ensure all components are fully installed and loaded"_.
+
+reboot your computer now, and then come back to continue.
+
+
+## Finish VVV Setup
+
+Run **these exact commands**:
+
+```
+cd  ~/repositories/VVV_Newspack
+
+bash <(curl -s https://raw.githubusercontent.com/Automattic/newspack-development-environment/master/setup_newspack.sh)
+
+vagrant up
+
+vagrant provision
+```
+
+* note: running shorter versions of the commands (such as _'vagrant up --provision'_ instead of the ones above) has sometimes shown not to execute the custom installation scripts properly
+
+This process should have downloaded and installed all the necessary Newspack project files, inside the VVV container. In case it has failed for some unpredicted reason, consult the [installation script](https://github.com/Automattic/newspack-development-environment/blob/master/config/homebin/vagrant_provision_custom) for required steps.
+
+
+## Build Newspack
+
+### Install Build Prerequisites
+
+The build process also requires some preinstalled applications. These are instructions for installing them on OS X.
+
+#### Install Homebrew
+
+You may need Homebrew to install various other software, so it’s recommended to get this sorted out early. To see if you have it already, run:
+
+```
+brew --version
+```
+
+If not, per instructions on https://brew.sh/ run:
+
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install) 
+```
+
+#### Install Node Version Manager
+
+In the development phase, Newspack repositories use Node.js to build. If your installed version of Node.js doesn’t match ours this can lead to a variety of problems, so we recommend using Node Version Manager (NVM) to easily control your version of Node. Start by checking if you have it already:
+
+```
+nvm --version
+```
+
+If not, follow the instructions in [this tutorial](https://medium.com/@isaacjoe/best-way-to-install-and-use-nvm-on-mac-e3a3f6bc494d). The steps to edit your bash profile can get a little tricky.
+
+
+### Build Blocks and Plugin
+
+We recommend using Node.js version 10.10.0 for now. 
+
+```
+node --version
+```
+
+If it isn’t v10.10.0:
+
+```
+nvm install 10.10.0
+
+nvm use 10.10.0
+
+node --version
+```
+
+Now it should be v10.10.0. 
+
+```
+cd  ~/repositories/VVV_Newspack/www/wordpress-trunk/public_html/src/wp-content/plugins/newspack-plugin	
+
+npm ci && npm run clean && npm run build:webpack
+
+cd  ~/repositories/VVV_Newspack/www/wordpress-trunk/public_html/src/wp-content/plugins/newspack-blocks
+
+npm ci && npm run clean && npm run build:webpack
+```
+
+## Run Newspack
+
+In a brower go to trunk.wordpress.test/wp-admin and login with username `admin` and password `password`.
