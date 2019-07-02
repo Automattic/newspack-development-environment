@@ -83,5 +83,5 @@ This process should have downloaded and installed all the necessary Newspack pro
 
 ## Run Newspack
 
-In a brower go to http://newspack-dev.test/wp-admin and login with username `admin` and password `password`.
+In a browser go to http://newspack-dev.test/wp-admin and login with username `admin` and password `password`.
 
