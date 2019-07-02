@@ -9,15 +9,22 @@ All of this assumes you are working on a Mac or a Linux. All code snippets shoul
 
 # Install the Prerequisites
 
-## Install Virtual Box
+**Note:** this environment was thoroughly tested with the following versions of software:
+- VirtualBox versions 6.0.4, 5.2.18
+- Vagrant versions 2.2.5, 2.2.4
+
+In case your setup attempt does't complete successfully, please consider up- or downgrading to one of these versions.
+
+
+## Install VirtualBox
    
-To determine if you have Virtual Box, run:
+To determine if you have VirtualBox and which version, run:
 
 ```
-virtualbox
+virtualbox --version
 ```
 
-This will open the Virtual Box application if you have it already. If not, install from https://www.virtualbox.org/
+This will open the VirtualBox application if you have it already. If not, install from https://www.virtualbox.org/
 
 
 ## Install Vagrant
