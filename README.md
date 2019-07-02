@@ -4,7 +4,7 @@ What follows are steps to guide you through setting up a local instance for [New
 
 Most of the steps are one-time setup that you may or may not need to do depending on your existing configuration and what you have installed.
 
-All of this assumes you are working on a Mac or a Linux. Before starting this, be sure you have an account at github.com and a github.com account and general experience cloning repositories. All code snippets should be run in the Terminal application.
+All of this assumes you are working on a Mac or a Linux. Before starting, be sure you have a github.com account and general experience cloning repositories. All code snippets should be run in the Terminal application.
 
 
 # Install the Prerequisites
