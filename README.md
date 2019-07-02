@@ -83,7 +83,7 @@ vagrant up
 vagrant provision
 ```
 
-* note: running shorter versions of the commands instead of the exact ones as above (such as _'vagrant up --provision'_) has sometimes shown not to execute the custom installation scripts properly
+* note: running shorter versions of the commands instead of exactly these ones (such as _'vagrant up --provision'_) has sometimes shown not to execute the custom installation scripts properly
 
 This process should have downloaded and installed all the necessary Newspack project files, inside the VVV container. In case it has failed for some unpredicted reason, consult the [installation script](https://github.com/Automattic/newspack-development-environment/blob/master/config/homebin/vagrant_provision_custom) for required steps.
 
