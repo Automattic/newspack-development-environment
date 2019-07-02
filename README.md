@@ -10,8 +10,8 @@ All of this assumes you are working on a Mac or a Linux. All code snippets shoul
 # Install the Prerequisites
 
 **Note:** this environment was thoroughly tested with the following versions of software:
-- VirtualBox versions 6.0.4, 5.2.18
-- Vagrant versions 2.2.5, 2.2.4
+- VirtualBox versions 6.0.4, 5.2.18 -> the minimum version required
+- Vagrant versions 2.2.5, 2.2.4 -> the minimum version required
 
 In case your setup attempt does't complete successfully, please consider up- or downgrading to one of these versions.
 
