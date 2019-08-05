@@ -70,3 +70,4 @@ general:
   db_backup: true
   # Import the databases if they're missing from backups
   db_restore: true
+  db_share_type: false
