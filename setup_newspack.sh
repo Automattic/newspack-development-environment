@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if correct location, and warn with continue option
-if [ ! -f ./config/default-config.yml -a ! -f ./config.yml ]; then
+if [ ! -f ./config/default-config.yml -a ! -f ./config/config.yml ]; then
     read -r -p "The config YML files not found in the config directory. Are you sure you are in the correct Vagrant instance location and wish to continue? [y/n] " response
     case "$response" in
         [yY]) 
