@@ -1,4 +1,9 @@
-# Newspack Development Environment
+# DEPRECATED
+
+This is repo is no longer supported in favor of the new [Automattic/newspack-docker](https://github.com/Automattic/newspack-docker). Please consider using that one instead.
+
+
+## Newspack Development Environment
 
 What follows are steps to guide you through setting up a local instance for [Newspack](https://newspack.blog/) testing.
 
